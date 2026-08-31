@@ -1,0 +1,26 @@
+# /etc/caddy/Caddyfile
+#
+# Caddy obtains and renews the Let's Encrypt certificate on its own and
+# redirects http to https automatically. There is no certbot step.
+
+untrackme.narek.actcollege.am {
+	encode zstd gzip
+
+	# A tool that strips tracking has no business keeping an access log.
+	log {
+		output discard
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		Permissions-Policy "geolocation=(), camera=(), microphone=(), payment=()"
+		-Server
+	}
+
+	reverse_proxy 127.0.0.1:3000 {
+		header_up X-Forwarded-For {remote_host}
+	}
+}

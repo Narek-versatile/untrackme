@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy · UntrackMe</title>
+<meta name="description" content="What UntrackMe stores, what it does not, and why.">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="wordmark" href="/">untrackme<span class="cut">?si=8fK2q</span></a>
+    <nav>
+      <a href="/">Clean a link</a>
+      <a href="/terms">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main class="doc wrap">
+  <h1>Privacy</h1>
+  <p class="stamp">Last updated 31 August 2026</p>
+
+  <p>A tool that removes tracking has no business adding its own. This page lists everything the service keeps, in full.</p>
+
+  <h2>What is stored</h2>
+  <ul>
+    <li><strong>Short links.</strong> If you tick "Also make a short link", the cleaned URL is written to a local SQLite database alongside a random six-character code and the time it was created. This is the only way <code>/r/&lt;code&gt;</code> can work.</li>
+    <li><strong>One number.</strong> A single integer counting how many links have been cleaned since the service started. It is not broken down by anything.</li>
+  </ul>
+
+  <h2>What is not stored</h2>
+  <ul>
+    <li>Links you clean without asking for a short link. They are processed in memory and discarded when the response is sent.</li>
+    <li>IP addresses, user agents, and referrers. The web server is configured not to write an access log.</li>
+    <li>Cookies. The site sets none, and there is nothing to consent to.</li>
+    <li>Analytics of any kind. No third-party script runs on this site. The fonts are served from this server, so your browser never contacts a font CDN.</li>
+    <li>Accounts. There are none.</li>
+  </ul>
+
+  <h2>The one exception</h2>
+  <p>Rate limiting keeps a count of requests per IP address in memory for sixty seconds at a time, so that one client cannot flood the service. Nothing is written to disk and nothing survives a restart.</p>
+
+  <h2>Short links are public</h2>
+  <p>A six-character code is short enough to guess. Anyone who tries a code that exists will be redirected to the URL behind it. Do not shorten a link you would not be comfortable handing to a stranger, and note that short links have no expiry.</p>
+
+  <h2>The API</h2>
+  <p><code>POST /clean</code> is open to any origin and requires no key. It is subject to the same rules as the website: nothing about the caller is recorded, and the submitted URL is only written to disk if the request asks for a short link.</p>
+
+  <h2>Changes</h2>
+  <p>If this ever changes, the date at the top of this page changes with it, and the full history is in the <a href="https://github.com/Narek-versatile/untrackme" rel="noopener">public repository</a> along with the code that backs every claim above.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>No cookies, no analytics, no record of the links you paste.</p>
+    <nav>
+      <a href="/">Clean a link</a>
+      <a href="/terms">Terms</a>
+      <a href="https://github.com/Narek-versatile/untrackme" rel="noopener">Source</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

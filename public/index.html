@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UntrackMe · take the trackers off a link</title>
+<meta name="description" content="Paste a link and see exactly which tracking parameters are attached to it, then strip them. No cookies, no analytics, no logs.">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<link rel="preload" href="/fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="wordmark" href="/">untrackme<span class="cut">?si=8fK2q</span></a>
+    <nav>
+      <a href="#catalogue">What comes off</a>
+      <a href="#api">API</a>
+      <a href="/privacy">Privacy</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero wrap">
+    <h1>Every link you copy is carrying something.</h1>
+    <p>Campaign tags, click IDs, playlist positions, share fingerprints. Paste a link to see what is attached to it, then take it off.</p>
+  </section>
+
+  <section class="tool wrap">
+    <form id="form" class="field" novalidate>
+      <label for="url">Paste a link</label>
+      <textarea id="url" name="url" rows="2" spellcheck="false" autocapitalize="off"
+        autocomplete="off" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ&amp;list=RDdQw4w9WgXcQ"></textarea>
+
+      <div class="controls">
+        <button type="submit" class="go" id="go">Clean link</button>
+        <label class="toggle">
+          <input type="checkbox" id="shorten">
+          Also make a short link
+        </label>
+      </div>
+    </form>
+
+    <p class="problem" id="problem" role="alert" hidden></p>
+
+    <p class="tally">Already cleared <strong id="tally">&hellip;</strong> links.</p>
+  </section>
+
+  <section class="report wrap" id="report">
+    <div class="caption">
+      <h2 class="eyebrow">The link, taken apart</h2>
+      <p id="report-note">An example. Paste a link above to run your own.</p>
+    </div>
+
+    <p class="base" id="base">https://www.youtube.com/watch</p>
+
+    <ul class="params" id="params">
+      <li class="held" style="--i:0"><span class="sep">?</span><span class="pair"><span class="k">v</span>=<span class="v">dQw4w9WgXcQ</span></span><span class="note">kept</span></li>
+      <li class="cut" style="--i:1"><span class="sep">&amp;</span><span class="pair"><span class="k">list</span>=<span class="v">RDdQw4w9WgXcQ</span></span><span class="note">Playlist ID</span></li>
+      <li class="cut" style="--i:2"><span class="sep">&amp;</span><span class="pair"><span class="k">index</span>=<span class="v">1</span></span><span class="note">Position in playlist</span></li>
+      <li class="cut" style="--i:3"><span class="sep">&amp;</span><span class="pair"><span class="k">si</span>=<span class="v">8fK2q</span></span><span class="note">Share fingerprint</span></li>
+      <li class="cut" style="--i:4"><span class="sep">&amp;</span><span class="pair"><span class="k">feature</span>=<span class="v">share</span></span><span class="note">Referral feature tag</span></li>
+    </ul>
+  </section>
+
+  <section class="output wrap" id="output" hidden aria-live="polite">
+    <div class="result">
+      <h2>Cleaned link</h2>
+      <div class="row">
+        <output id="cleaned"></output>
+        <button type="button" class="copy" data-copy="cleaned">Copy</button>
+      </div>
+    </div>
+
+    <div class="result" id="short-block" hidden>
+      <h2>Short link</h2>
+      <div class="row">
+        <output id="short"></output>
+        <button type="button" class="copy" data-copy="short">Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" id="catalogue">
+    <h2>What comes off</h2>
+    <p>A parameter is removed when it exists to identify the person clicking, the campaign that sent them, or the surface they clicked from. Parameters the page actually needs, like a product ID or a search query, stay.</p>
+
+    <div class="catalogue">
+      <div>
+        <h3>Campaign tags</h3>
+        <code>utm_source, utm_medium, utm_campaign, mtm_*, pk_*, itm_*</code>
+        <p>Written by marketing tools so a visit can be tied back to one specific email, ad, or post.</p>
+      </div>
+      <div>
+        <h3>Click IDs</h3>
+        <code>fbclid, gclid, msclkid, ttclid, twclid, igshid, li_fat_id</code>
+        <p>Unique per click. These are how an ad network matches a page view to the individual it showed the ad to.</p>
+      </div>
+      <div>
+        <h3>Share fingerprints</h3>
+        <code>si, ref_src, __twitter_impression, _branch_*</code>
+        <p>Added at the moment you press Share. They record who sent the link, so the receiver's click reports back to the sender's account.</p>
+      </div>
+      <div>
+        <h3>Playlist and player state</h3>
+        <code>list, index, start_radio, pp, ab_channel, feature</code>
+        <p>Carries your viewing session into someone else's. Sending a video with these still attached hands over your playlist and where you were in it.</p>
+      </div>
+      <div>
+        <h3>Affiliate and session codes</h3>
+        <code>irclickid, cjevent, ranMID, ascsubtag, mc_eid, mkt_tok</code>
+        <p>Commission tracking and per-recipient email IDs. An <code>mc_eid</code> in a forwarded newsletter link identifies the original subscriber.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <h2>YouTube, specifically</h2>
+    <p>YouTube links are the worst offenders, so they get a stricter rule than everything else. On a <code class="yt">/watch</code> URL only <code class="yt">v</code> survives. Every other parameter is dropped, including the start timestamp, because the allowlist is deliberately narrow rather than a list of known-bad names that YouTube can add to faster than anyone can keep up.</p>
+    <p><code class="yt">youtu.be</code> links keep nothing at all: the video ID lives in the path, so the query string is pure tracking.</p>
+  </section>
+
+  <section class="section wrap" id="api">
+    <h2>For your own tools</h2>
+    <p>The cleaning logic sits behind one POST endpoint that any script, shortcut, or browser extension can call. It is open to every origin, needs no key, and stores nothing about the caller.</p>
+
+<pre><code>curl -X POST https://untrackme.narek.actcollege.am/clean \
+  -H 'Content-Type: application/json' \
+  -d '{"url":"https://youtu.be/dQw4w9WgXcQ?si=xY12ab","shorten":true}'</code></pre>
+
+<pre><code>{
+  "ok": true,
+  "original": "https://youtu.be/dQw4w9WgXcQ?si=xY12ab",
+  "cleaned": "https://youtu.be/dQw4w9WgXcQ",
+  "removed": [
+    { "key": "si", "value": "xY12ab", "reason": "Share fingerprint" }
+  ],
+  "kept": [],
+  "changed": true,
+  "total": 1284,
+  "code": "a7Bc2Q",
+  "short": "https://untrackme.narek.actcollege.am/r/a7Bc2Q"
+}</code></pre>
+
+    <p><span class="cmt">Set <code>shorten</code> to false or leave it out and the <code>code</code> and <code>short</code> fields are omitted. <code>kept</code> lists the parameters that survived, in their original order. <code>GET /api/stats</code> returns the public counter. <code>GET /r/&lt;code&gt;</code> answers with a 302 to the cleaned URL.</span></p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>No cookies, no analytics, no record of the links you paste.</p>
+    <nav>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="https://github.com/Narek-versatile/untrackme" rel="noopener">Source</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+@import url('/fonts.css');
+
+/* ------------------------------------------------------------------ tokens */
+
+:root {
+  --paper: #e4e6e1;
+  --paper-raised: #f1f2ee;
+  --ink: #1a201d;
+  --ink-mid: #5b635e;
+  --ink-faint: #8b928c;
+  --rule: #c9cdc5;
+  --rule-soft: #d6d9d2;
+  --strike: #9d3626;
+  --strike-wash: #f0e2de;
+  --keep: #1e5c48;
+
+  --display: 'Bricolage Grotesque', 'Trebuchet MS', sans-serif;
+  --body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --data: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Menlo, monospace;
+
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --measure: 46rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #151917;
+    --paper-raised: #1d2220;
+    --ink: #e5e8e3;
+    --ink-mid: #9aa29c;
+    --ink-faint: #6c746e;
+    --rule: #2d3430;
+    --rule-soft: #262c29;
+    --strike: #d9705c;
+    --strike-wash: #2a1e1b;
+    --keep: #74c1a0;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--keep);
+  outline-offset: 3px;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--ink-faint);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.eyebrow {
+  font-family: var(--data);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 0.75rem;
+}
+
+/* ------------------------------------------------------------------ header */
+
+.masthead {
+  border-bottom: 1px solid var(--rule);
+}
+
+.masthead .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-block: 1.125rem;
+}
+
+.wordmark {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.0625rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.05em;
+}
+
+.wordmark .cut {
+  color: var(--strike);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.masthead nav {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.875rem;
+  color: var(--ink-mid);
+}
+
+/* ------------------------------------------------------------------ hero */
+
+.hero {
+  padding-block: clamp(2.5rem, 8vw, 4.5rem) 2rem;
+}
+
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2rem, 6.2vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+  max-width: 18ch;
+}
+
+.hero p {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--ink-mid);
+  font-size: clamp(1rem, 2.2vw, 1.125rem);
+}
+
+/* ------------------------------------------------------------------ tool */
+
+.tool {
+  padding-bottom: 2.5rem;
+}
+
+.field {
+  display: block;
+}
+
+.field > label {
+  display: block;
+  font-family: var(--data);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.5rem;
+}
+
+#url {
+  width: 100%;
+  min-height: 5.5rem;
+  resize: vertical;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: var(--data);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  word-break: break-all;
+}
+
+#url::placeholder {
+  color: var(--ink-faint);
+}
+
+#url:focus-visible {
+  border-color: var(--keep);
+  outline-offset: 0;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.25rem;
+  margin-top: 1rem;
+}
+
+button.go {
+  font-family: var(--body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding: 0.6875rem 1.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+}
+
+button.go:hover {
+  background: transparent;
+  color: var(--ink);
+}
+
+button.go[disabled] {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--ink-mid);
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--keep);
+  cursor: pointer;
+}
+
+.tally {
+  margin: 1.25rem 0 0;
+  font-family: var(--data);
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+}
+
+.tally strong {
+  color: var(--ink-mid);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.problem {
+  margin: 1rem 0 0;
+  padding: 0.625rem 0.875rem;
+  border-left: 2px solid var(--strike);
+  background: var(--strike-wash);
+  color: var(--strike);
+  font-size: 0.9375rem;
+}
+
+.problem[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------- the dissection panel */
+
+.report {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding-block: 1.75rem;
+}
+
+.report .caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.report .caption p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+}
+
+.base {
+  font-family: var(--data);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  word-break: break-all;
+  margin-bottom: 0.875rem;
+}
+
+.params {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.params li {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) auto;
+  gap: 0 0.5rem;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+  font-family: var(--data);
+  font-size: 0.875rem;
+}
+
+.params .sep {
+  color: var(--ink-faint);
+}
+
+.params .pair {
+  min-width: 0;
+  word-break: break-all;
+}
+
+.params .k {
+  font-weight: 600;
+}
+
+.params .v {
+  color: var(--ink-mid);
+}
+
+.params .note {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.params .cut .pair {
+  color: var(--strike);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.params .cut .v {
+  color: var(--strike);
+  opacity: 0.75;
+}
+
+.params .cut .note {
+  color: var(--strike);
+}
+
+.params .held .pair {
+  color: var(--keep);
+}
+
+.params .held .v {
+  color: var(--keep);
+  opacity: 0.85;
+}
+
+.params .held .note {
+  color: var(--keep);
+  font-weight: 500;
+}
+
+/* Rows draw themselves in one short sequence, then stop. */
+@media (prefers-reduced-motion: no-preference) {
+  .params.animate li {
+    animation: row-in 240ms ease-out both;
+    animation-delay: calc(var(--i) * 45ms);
+  }
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.nothing-cut {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ink-mid);
+}
+
+/* ------------------------------------------------------------------ output */
+
+.output {
+  padding-block: 1.75rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.output[hidden] {
+  display: none;
+}
+
+.result h2 {
+  font-family: var(--data);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 0.5rem;
+}
+
+.result .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.result output {
+  font-family: var(--data);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  word-break: break-all;
+  min-width: 0;
+  flex: 1 1 20rem;
+}
+
+button.copy {
+  flex: 0 0 auto;
+  font-family: var(--data);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink-mid);
+  cursor: pointer;
+}
+
+button.copy:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+button.copy[data-done='yes'] {
+  border-color: var(--keep);
+  color: var(--keep);
+}
+
+/* ------------------------------------------------------------------ prose */
+
+.section {
+  padding-block: 3rem;
+  border-top: 1px solid var(--rule);
+}
+
+.section h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.375rem, 3.4vw, 1.75rem);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0 0 1.5rem;
+}
+
+.section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.section p {
+  margin: 0 0 1rem;
+  max-width: 62ch;
+  color: var(--ink-mid);
+}
+
+.catalogue {
+  margin: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.catalogue > div {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.catalogue code {
+  font-family: var(--data);
+  font-size: 0.8125rem;
+  color: var(--strike);
+  word-break: break-all;
+}
+
+.catalogue p {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+pre {
+  margin: 0 0 1rem;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--paper-raised);
+  font-family: var(--data);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+
+pre .cmt {
+  color: var(--ink-faint);
+}
+
+/* ------------------------------------------------------------------ footer */
+
+footer {
+  border-top: 1px solid var(--rule);
+  padding-block: 2rem 3rem;
+  font-size: 0.875rem;
+  color: var(--ink-mid);
+}
+
+footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+/* ------------------------------------------------------------------ legal */
+
+.doc {
+  padding-block: 3rem 4rem;
+}
+
+.doc h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 0.5rem;
+}
+
+.doc .stamp {
+  font-family: var(--data);
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  margin: 0 0 2.5rem;
+}
+
+.doc h2 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin: 2rem 0 0.5rem;
+}
+
+.doc p,
+.doc li {
+  color: var(--ink-mid);
+  max-width: 64ch;
+}
+
+.doc p {
+  margin: 0 0 1rem;
+}
+
+.doc ul {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+}
+
+.doc li {
+  margin-bottom: 0.375rem;
+}
+
+@media (max-width: 34rem) {
+  .params li {
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+  }
+
+  .params .note {
+    grid-column: 2;
+    text-align: left;
+    white-space: normal;
+  }
+}
+
+/* ------------------------------------------------------- inline code, misc */
+
+.report .caption .eyebrow {
+  margin: 0;
+}
+
+.section p code,
+.doc code,
+.catalogue p code {
+  font-family: var(--data);
+  font-size: 0.875em;
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+  background: var(--rule-soft);
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.section .cmt {
+  font-size: 0.875rem;
+  color: var(--ink-faint);
+}
+
+.section .cmt code {
+  color: var(--ink-mid);
+}
