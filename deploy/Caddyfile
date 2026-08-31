@@ -40,7 +40,9 @@
 # =============================================================================
 109-94-170-160.sslip.io {
 	import common
-	header X-Robots-Tag "noindex, nofollow"
+	# noindex only. nofollow would add nothing here and some link-preview
+	# scrapers treat it as a reason not to unfurl the page at all.
+	header X-Robots-Tag "noindex"
 }
 # ======================= END OF TEMPORARY BLOCK ==============================
 

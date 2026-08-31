@@ -9,8 +9,9 @@
 to that IP. That is enough for Let's Encrypt to issue a real certificate, so
 the stand-in is genuine HTTPS and safe to share, with no DNS zone required.
 
-It is served with `X-Robots-Tag: noindex, nofollow` so search engines never
-index it and it cannot compete with the real domain for the same content.
+It is served with `X-Robots-Tag: noindex` so search engines never index it
+and it cannot compete with the real domain for the same content. Link previews
+still work: that header governs search indexing, not social scrapers.
 
 ---
 
