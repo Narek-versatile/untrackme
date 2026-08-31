@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('node:fs');
 const path = require('node:path');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
@@ -110,6 +111,38 @@ app.get('/api/stats', cors, (req, res) => {
   res.json({ ok: true, cleaned: store.totalCleans() });
 });
 
+// ---------------------------------------------------------------- Pages
+
+/**
+ * Pages carry absolute URLs in their canonical link and Open Graph tags, and
+ * the site answers on more than one hostname while the real domain is being
+ * set up. Rather than hard-code one origin and hand the other host a preview
+ * pointing at a domain that does not resolve, the origin is substituted per
+ * request. Templates are read once at boot.
+ */
+const PAGES = ['index', 'privacy', 'terms', '404'];
+const templates = new Map();
+
+for (const name of PAGES) {
+  templates.set(name, fs.readFileSync(path.join(__dirname, 'public', `${name}.html`), 'utf8'));
+}
+
+function renderPage(name, req) {
+  return templates.get(name).split('{{ORIGIN}}').join(originFor(req));
+}
+
+function sendPage(name, req, res, status = 200) {
+  res
+    .status(status)
+    .type('html')
+    .set('Cache-Control', 'no-cache')
+    .send(renderPage(name, req));
+}
+
+app.get(['/', '/index.html'], (req, res) => sendPage('index', req, res));
+app.get(['/privacy', '/privacy.html'], (req, res) => sendPage('privacy', req, res));
+app.get(['/terms', '/terms.html'], (req, res) => sendPage('terms', req, res));
+
 // ---------------------------------------------------------------- Redirect
 
 app.get('/r/:code', (req, res, next) => {
@@ -117,13 +150,7 @@ app.get('/r/:code', (req, res, next) => {
   if (!/^[A-Za-z0-9]{6}$/.test(code)) return next();
 
   const url = store.resolve(code);
-  if (!url) {
-    return res
-      .status(404)
-      .sendFile(path.join(__dirname, 'public', '404.html'), (err) => {
-        if (err) res.status(404).type('text/plain').send('No link with that code.');
-      });
-  }
+  if (!url) return sendPage('404', req, res, 404);
 
   res.setHeader('Cache-Control', 'no-store');
   res.redirect(302, url);
@@ -133,7 +160,6 @@ app.get('/r/:code', (req, res, next) => {
 
 app.use(
   express.static(path.join(__dirname, 'public'), {
-    extensions: ['html'],
     maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0,
     setHeaders(res, filePath) {
       if (filePath.endsWith('.woff2')) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
@@ -142,11 +168,7 @@ app.use(
   })
 );
 
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'), (err) => {
-    if (err) res.status(404).type('text/plain').send('Not found.');
-  });
-});
+app.use((req, res) => sendPage('404', req, res, 404));
 
 app.use((err, req, res, _next) => {
   console.error(err);

@@ -10,14 +10,39 @@
 <link rel="preload" href="/fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css">
+<link rel="canonical" href="{{ORIGIN}}/">
+
+<link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#e4e6e1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151917" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="UntrackMe">
+<meta property="og:locale" content="en">
+<meta property="og:title" content="UntrackMe: see what rides along with your links">
+<meta property="og:description" content="Paste a link and see exactly which tracking parameters are attached to it, then strip them. Every removal is explained. No cookies, no analytics, no logs.">
+<meta property="og:url" content="{{ORIGIN}}/">
+<meta property="og:image" content="{{ORIGIN}}/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A YouTube link taken apart parameter by parameter: v is kept, list and si are struck through and labelled Playlist ID and Share fingerprint.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="UntrackMe: see what rides along with your links">
+<meta name="twitter:description" content="Paste a link and see exactly which tracking parameters are attached to it, then strip them. Every removal is explained. No cookies, no analytics, no logs.">
+<meta name="twitter:image" content="{{ORIGIN}}/og.png">
+<meta name="twitter:image:alt" content="A YouTube link taken apart parameter by parameter, showing which parts are kept and which are stripped.">
 </head>
 <body>
 
 <header class="masthead">
   <div class="wrap">
     <a class="wordmark" href="/">untrackme<span class="cut">?si=8fK2q</span></a>
-    <nav>
+    <nav aria-label="Sections">
       <a href="#catalogue">What comes off</a>
       <a href="#api">API</a>
       <a href="/privacy">Privacy</a>
@@ -156,13 +181,37 @@
 <footer>
   <div class="wrap">
     <p>No cookies, no analytics, no record of the links you paste.</p>
-    <nav>
+    <nav aria-label="Site">
       <a href="/privacy">Privacy</a>
       <a href="/terms">Terms</a>
       <a href="https://github.com/Narek-versatile/untrackme" rel="noopener">Source</a>
     </nav>
   </div>
 </footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "UntrackMe",
+  "url": "{{ORIGIN}}/",
+  "description": "Removes tracking parameters from a URL and explains every removal. Campaign tags, click IDs, share fingerprints and playlist state are stripped; parameters the page needs are kept.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "license": "https://opensource.org/licenses/MIT",
+  "author": { "@type": "Person", "name": "Narek Gevorgyan" },
+  "featureList": [
+    "Strips UTM campaign tags, click IDs and share fingerprints from any URL",
+    "Keeps only the v parameter on YouTube watch links",
+    "Explains what each removed parameter was",
+    "Optional six-character short link",
+    "Open REST API at POST /clean for scripts and browser extensions"
+  ]
+}
+</script>
 
 <script src="/app.js"></script>
 </body>

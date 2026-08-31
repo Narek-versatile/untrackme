@@ -96,8 +96,18 @@ Environment variables, all optional:
 | -------------------- | ------------------------------------------- |
 | `PORT`               | `3000`                                      |
 | `PUBLIC_ORIGIN`      | `https://untrackme.narek.actcollege.am`     |
+| `ALLOWED_HOSTS`      | `untrackme.narek.actcollege.am`             |
 | `UNTRACKME_DATA_DIR` | `./data`                                    |
 | `NODE_ENV`           | unset; `production` turns on asset caching  |
+
+`ALLOWED_HOSTS` is the set of hostnames a short link may point at. The app uses
+whichever of them served the request, so the same deployment can answer on more
+than one name without handing anyone a link on the wrong one. A `Host` header
+outside the list falls back to `PUBLIC_ORIGIN`.
+
+Page templates are read once at boot, so an edit to a file in `public/` needs a
+restart to show up. `npm run dev` restarts on change; in production `pm2 restart
+untrackme` does it.
 
 ## Deployment
 
@@ -152,6 +162,72 @@ will work. Full steps, including removing the temporary address, are in
 `deploy/nginx.conf` is provided for a host that already runs nginx. It needs
 certbot run separately. Caddy is the supported path.
 
+## Discoverability and assets
+
+`tools/make-images.js` regenerates the social preview and the favicon package.
+It downloads the two font families to `tools/.fonts` on first run (gitignored)
+and renders with resvg, so the output is reproducible rather than hand-drawn:
+
+```bash
+node tools/make-images.js
+```
+
+It writes `public/og.png` (1200x630), `favicon.ico`, `apple-touch-icon.png`,
+`icon-192.png` and `icon-512.png`. The mark itself is `public/icon.svg`.
+
+Every page carries a canonical link, Open Graph and Twitter card tags, and the
+home page carries `WebApplication` JSON-LD. Those URLs are absolute and are
+substituted per request, so previews resolve correctly on whichever hostname
+served the page.
+
+`public/robots.txt` allows everything except `/r/`, which is redirects rather
+than content. `public/sitemap.xml` lists the three real pages and is referenced
+from robots.txt. `public/site.webmanifest` makes the tool installable.
+
+### Getting indexed
+
+1. Point the domain at the server first. Nothing below works until
+   `https://untrackme.narek.actcollege.am/` serves a 200 over HTTPS.
+2. Add the property in [Google Search Console](https://search.google.com/search-console)
+   as a URL prefix, verify by DNS TXT record in the same Route 53 zone, then
+   submit `https://untrackme.narek.actcollege.am/sitemap.xml` under Sitemaps.
+3. Use "URL Inspection" on the home page and request indexing to skip the
+   queue.
+4. Repeat in [Bing Webmaster Tools](https://www.bing.com/webmasters), which
+   can import the Search Console property directly. Bing also feeds
+   DuckDuckGo, Ecosia and Yahoo.
+5. Confirm the preview renders with the
+   [Facebook sharing debugger](https://developers.facebook.com/tools/debug/)
+   and [LinkedIn post inspector](https://www.linkedin.com/post-inspector/).
+   Both cache aggressively, so re-scrape after any change to `og.png`.
+6. Check the structured data with the
+   [Rich Results Test](https://search.google.com/test/rich-results).
+
+Indexing takes days to weeks. A sitemap is an invitation, not a guarantee: the
+thing that actually moves it is other sites linking to it.
+
+## Accessibility
+
+Audited with axe-core against WCAG 2.0/2.1/2.2 A and AA plus axe's
+best-practice rules. All four pages pass with no violations in both light and
+dark themes, and in the post-clean result state.
+
+What that rests on, so it does not regress:
+
+- Every text colour meets 4.5:1 against both the page and raised backgrounds.
+  `--ink-faint` is at the limit in both themes; darkening it further in light
+  or lightening it in dark is fine, the other direction is not.
+- Removed and kept parameters are distinguished by a strikethrough and a text
+  label as well as by colour, so the report does not depend on telling red
+  from green.
+- Interactive targets are at least 24px in their smaller dimension.
+- `prefers-reduced-motion` removes the row reveal.
+- The result region is `aria-live="polite"`, errors are `role="alert"`, and
+  the two `nav` landmarks are labelled.
+
+To re-run it, serve the site, then load `node_modules/axe-core/axe.min.js` in
+the page and call `axe.run`.
+
 ## Layout
 
 ```
@@ -164,6 +240,8 @@ deploy/setup.sh           provisioning and redeploy
 deploy/Caddyfile          reverse proxy and TLS
 deploy/ecosystem.config.cjs   pm2 process definition
 deploy/nginx.conf         optional alternative to Caddy
+tools/make-images.js      regenerates og.png and the favicon package
+TEMPORARY.md              removing the stand-in address once DNS is live
 ```
 
 ## Adding a tracking parameter

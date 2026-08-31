@@ -7,7 +7,7 @@
   --paper-raised: #f1f2ee;
   --ink: #1a201d;
   --ink-mid: #5b635e;
-  --ink-faint: #8b928c;
+  --ink-faint: #616862;
   --rule: #c9cdc5;
   --rule-soft: #d6d9d2;
   --strike: #9d3626;
@@ -28,7 +28,7 @@
     --paper-raised: #1d2220;
     --ink: #e5e8e3;
     --ink-mid: #9aa29c;
-    --ink-faint: #6c746e;
+    --ink-faint: #828a84;
     --rule: #2d3430;
     --rule-soft: #262c29;
     --strike: #d9705c;
@@ -230,6 +230,8 @@ button.go[disabled] {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  /* Padding brings the clickable label past the 24px minimum target size. */
+  padding: 0.375rem 0;
   font-size: 0.9375rem;
   color: var(--ink-mid);
   cursor: pointer;
@@ -237,8 +239,8 @@ button.go[disabled] {
 }
 
 .toggle input {
-  width: 1rem;
-  height: 1rem;
+  width: 1.125rem;
+  height: 1.125rem;
   accent-color: var(--keep);
   cursor: pointer;
 }
@@ -351,7 +353,6 @@ button.go[disabled] {
 
 .params .cut .v {
   color: var(--strike);
-  opacity: 0.75;
 }
 
 .params .cut .note {
@@ -364,7 +365,6 @@ button.go[disabled] {
 
 .params .held .v {
   color: var(--keep);
-  opacity: 0.85;
 }
 
 .params .held .note {
@@ -438,6 +438,7 @@ button.go[disabled] {
 
 button.copy {
   flex: 0 0 auto;
+  min-height: 1.75rem;
   font-family: var(--data);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
@@ -632,6 +633,3 @@ footer nav {
   color: var(--ink-faint);
 }
 
-.section .cmt code {
-  color: var(--ink-mid);
-}

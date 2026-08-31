@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="UntrackMe">
-  <rect width="32" height="32" rx="5" fill="#1a201d"/>
-  <text x="16" y="23" text-anchor="middle" font-family="ui-monospace, monospace" font-size="20" font-weight="700" fill="#e4e6e1">?</text>
-  <rect x="4" y="14.5" width="24" height="3" rx="1.5" fill="#c8503c"/>
+  <rect width="32" height="32" rx="5.12" fill="#1a201d"/>
+  <text x="16" y="23.5" text-anchor="middle" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" font-size="21" font-weight="700" fill="#e4e6e1">?</text>
+  <rect x="3.5" y="14.5" width="25" height="3.2" rx="1.6" fill="#c8503c"/>
 </svg>

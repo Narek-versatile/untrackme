@@ -1,0 +1,10 @@
+# UntrackMe
+
+User-agent: *
+Allow: /
+
+# Short links are redirects, not pages. Crawling them would follow people's
+# shared links out to third-party sites for no benefit.
+Disallow: /r/
+
+Sitemap: https://untrackme.narek.actcollege.am/sitemap.xml
