@@ -23,6 +23,12 @@ module.exports = {
         PORT: 3000,
         PUBLIC_ORIGIN: 'https://untrackme.narek.actcollege.am',
 
+        // TEMPORARY: the second host is the sslip.io stand-in used while the
+        // real domain has no DNS. Short links point at whichever of these
+        // hosts served the request. Drop the stand-in from this list once the
+        // domain resolves. See TEMPORARY.md.
+        ALLOWED_HOSTS: 'untrackme.narek.actcollege.am,109-94-170-160.sslip.io',
+
         // Kept outside the checkout so a redeploy never touches the data.
         UNTRACKME_DATA_DIR: '/var/lib/untrackme'
       },

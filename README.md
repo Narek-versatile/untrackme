@@ -5,6 +5,11 @@ one back. Optionally shorten the result.
 
 Live at **https://untrackme.narek.actcollege.am**
 
+> **Temporary address.** Until that domain has a DNS record, the site is
+> reachable at **https://109-94-170-160.sslip.io** instead. That address is a
+> stand-in and is served `noindex`. See [TEMPORARY.md](TEMPORARY.md) for how to
+> point the real domain at the server and remove the stand-in afterwards.
+
 The point of difference is that it explains itself: every parameter it removes
 is listed with what that parameter actually was, so the answer is auditable
 rather than a black box that hands you a different URL.
@@ -136,10 +141,11 @@ To back up, copy `/var/lib/untrackme/`. That directory is the entire state.
 
 ### DNS
 
-`untrackme.narek.actcollege.am` needs an A record pointing at the server. Caddy
-requests the certificate over HTTP-01 on the first request to the domain, so
-the record must resolve and ports 80 and 443 must be reachable before HTTPS
-will work.
+`untrackme.narek.actcollege.am` needs an A record pointing at `109.94.170.160`.
+Caddy requests the certificate over HTTP-01 on the first request to the domain,
+so the record must resolve and ports 80 and 443 must be reachable before HTTPS
+will work. Full steps, including removing the temporary address, are in
+[TEMPORARY.md](TEMPORARY.md).
 
 ### nginx instead of Caddy
 

@@ -1,9 +1,9 @@
 # /etc/caddy/Caddyfile
 #
-# Caddy obtains and renews the Let's Encrypt certificate on its own and
+# Caddy obtains and renews the Let's Encrypt certificates on its own and
 # redirects http to https automatically. There is no certbot step.
 
-untrackme.narek.actcollege.am {
+(common) {
 	encode zstd gzip
 
 	# A tool that strips tracking has no business keeping an access log.
@@ -23,4 +23,27 @@ untrackme.narek.actcollege.am {
 	reverse_proxy 127.0.0.1:3000 {
 		header_up X-Forwarded-For {remote_host}
 	}
+}
+
+# =============================================================================
+# TEMPORARY PUBLIC ADDRESS                       >>> DELETE THIS BLOCK <<<
+#
+# A stand-in so the site can be shared before untrackme.narek.actcollege.am
+# has an A record. sslip.io is wildcard DNS: 109-94-170-160.sslip.io resolves
+# to this server's IP, which is enough for Let's Encrypt to issue a real
+# certificate without controlling any DNS zone.
+#
+# It is served noindex so it can never compete with the real domain in search
+# results for the same content.
+#
+# Removal checklist lives in TEMPORARY.md in the repository root.
+# =============================================================================
+109-94-170-160.sslip.io {
+	import common
+	header X-Robots-Tag "noindex, nofollow"
+}
+# ======================= END OF TEMPORARY BLOCK ==============================
+
+untrackme.narek.actcollege.am {
+	import common
 }

@@ -11,6 +11,35 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const PUBLIC_ORIGIN = process.env.PUBLIC_ORIGIN || 'https://untrackme.narek.actcollege.am';
 
+/**
+ * Hosts allowed to appear in a short link. A short link has to point back at
+ * whichever hostname the caller actually used, or a link shared from the
+ * stand-in address would resolve to a domain that is not live yet. The list
+ * is an allowlist so a forged Host header cannot mint a link to someone
+ * else's origin.
+ */
+const ALLOWED_HOSTS = new Set(
+  (process.env.ALLOWED_HOSTS || 'untrackme.narek.actcollege.am')
+    .split(',')
+    .map((h) => h.trim().toLowerCase())
+    .filter(Boolean)
+);
+
+function originFor(req) {
+  const host = String(req.get('host') || '').toLowerCase();
+  const bare = host.replace(/:\d+$/, '');
+
+  if (ALLOWED_HOSTS.has(bare)) {
+    const proto = req.protocol === 'http' && bare !== 'localhost' ? 'https' : req.protocol;
+    return `${proto}://${host}`;
+  }
+
+  // Local development, where the host is not worth allowlisting.
+  if (bare === 'localhost' || bare === '127.0.0.1') return `http://${host}`;
+
+  return PUBLIC_ORIGIN;
+}
+
 // Caddy terminates TLS, so trust its forwarded headers for client IPs.
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
@@ -71,7 +100,7 @@ app.post('/clean', cors, apiLimit, (req, res) => {
   if (body.shorten === true) {
     const code = store.shorten(result.cleaned);
     payload.code = code;
-    payload.short = `${PUBLIC_ORIGIN}/r/${code}`;
+    payload.short = `${originFor(req)}/r/${code}`;
   }
 
   res.json(payload);
